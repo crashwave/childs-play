@@ -344,19 +344,23 @@ function childtheme_override_postfooter() {
     $post_type_obj = get_post_type_object($post_type);
     $tagsection = get_the_tags();
 
-    // Display nothing for "Page" post-type
-    if ( $post_type == 'page' ) {
-        $postfooter = '';
+		// Check for "Page" post-type and logged in user to show edit link
+	    if ( $post_type == 'page' && current_user_can('edit_posts') ) {
+	        $postfooter = '<div class="entry-utility">' . thematic_postfooter_posteditlink();
+	        $postfooter .= "</div><!-- .entry-utility -->\n";
+	    // Display nothing for logged out users on a "Page" post-type 
+	    } elseif ( $post_type == 'page' ) {
+	        $postfooter = '';
     // For post-types other than "Pages" press on
     } else {
         $postfooter = '<footer class="entry-utility">';
         $postfooter .= '<ul class="main-utilities">';
-        $postfooter .= '<li class="entypo-user">' . thematic_postmeta_authorlink() . '</li>';
-        $postfooter .= '<li class="entypo-calendar">' . thematic_postmeta_entrydate() . '</li>';
+        $postfooter .= '<li class="entypo-user" title=" ' . __('Author', 'thematic') .' ">' . thematic_postmeta_authorlink() . '</li>';
+        $postfooter .= '<li class="entypo-calendar" title=" ' . __('Date', 'thematic') .' ">' . thematic_postmeta_entrydate() . '</li>';
         $postfooter .= '<li class="entypo-comment">' . thematic_postfooter_postcomments() . '</li>';
         $postfooter .= '</ul>';
         $postfooter .= '<ul class="sub-utilities">';
-        $postfooter .= '<li class="entypo-folder">' . thematic_postfooter_postcategory() . '</li>';
+        $postfooter .= '<li class="entypo-folder" title=" ' . __('Categories', 'thematic') .' ">' . thematic_postfooter_postcategory() . '</li>';
             if ( $tagsection ) {
         $postfooter .= '<li class="entypo-tag">' . thematic_postfooter_posttags() . '</li>';
             }
@@ -371,9 +375,11 @@ function childtheme_override_postfooter() {
 }
 
 function childtheme_postmeta_entrydate($entrydate) {
-    $entrydate = '<span class="meta-prep meta-prep-entry-date">' . __('', 'thematic') . '</span>';
-    $entrydate .= '<span class="entry-date">';
+//    $entrydate = '<span class="meta-prep meta-prep-entry-date">' . __('', 'thematic') . '</span>';
+    $entrydate = '<span class="entry-date">';
+    $entrydate .= '<a href='. get_month_link(get_the_time('Y'), get_the_time('m')).'>';//DC edit//Add//Hadir
     $entrydate .= get_the_time( thematic_time_display() );
+    $entrydate .= '</a>';//DC eddit add//Hadir Elba
     $entrydate .= '</span>';
     return $entrydate;
 }
@@ -383,9 +389,9 @@ add_filter('thematic_postmeta_entrydate', 'childtheme_postmeta_entrydate');
 function childtheme_override_postfooter_postcategory() {
     $postcategory = '<span class="cat-links">';
     if ( is_category() && $cats_meow = thematic_cats_meow(', ') ) {
-        $postcategory .= __('<span class="meta-prep meta-prep-category">Also posted in</span> ', 'thematic') . $cats_meow;
+        $postcategory .= '<span class="meta-prep meta-prep-category">'.sprintf( __('Also in %s', 'thematic'), $cats_meow ).'</span> ';
     } else {
-        $postcategory .= __('<span class="meta-prep meta-prep-category">Posted in</span> ', 'thematic') . get_the_category_list(', ');
+        $postcategory .= '<span class="meta-prep meta-prep-category">'.sprintf( __('Posted in %s', 'thematic'), get_the_category_list(', ') ).'</span> '; 
     }
     $postcategory .= '</span>';
     return apply_filters('thematic_postfooter_postcategory',$postcategory);
@@ -476,7 +482,7 @@ function childtheme_override_index_loop() {
     $count = 1;
 
     // remove sticky posts from the query so they don't duplicate in the featured section
-    query_posts(array("post__not_in" =>get_option("sticky_posts"), 'paged' => ( get_query_var('paged') ? get_query_var('paged') : 1 )));
+//hme    query_posts(array("post__not_in" =>get_option("sticky_posts"), 'paged' => ( get_query_var('paged') ? get_query_var('paged') : 1 )));
     while ( have_posts() ) : the_post();
 
         // action hook for insterting content above #post
@@ -556,6 +562,96 @@ function add_menu_parent_class( $items ) {
 add_filter( 'wp_nav_menu_objects', 'add_menu_parent_class' );
 
 
+
+//////////////////////////////////
+function childtheme_add_support() {
+    add_theme_support( 'thematic_support_post_type_author_link' );
+
+}
+add_action('thematic_child_init', 'childtheme_add_support');
+
+function new_excerpt_more(  ) {
+   global $post;
+   $excerpt_more= '<br/><a href="'. get_permalink($post->ID) . '">' . 'Read More &raquo;' . '</a>';
+   apply_filters( 'excerpt_more', $excerpt_more );
+   }
+
+function childtheme_override_content_init() {
+		global $thematic_content_length;
+		
+		$content = '';
+		$thematic_content_length = '';
+		
+		if (is_home() || is_front_page()) { 
+          if ( !has_excerpt())
+            $content = 'full';
+          else 
+            $content = 'excerpt';
+		} elseif (is_single()) {
+			$content = 'full';
+		} elseif (is_tag()) {
+			$content = 'excerpt';
+		} elseif (is_search()) {
+			$content = 'excerpt';	
+		} elseif (is_category()) {
+			$content = 'excerpt';
+		} elseif (is_author()) {
+			$content = 'excerpt';
+		} elseif (is_archive()) {
+			$content = 'excerpt'; 
+		}
+		
+		$thematic_content_length = apply_filters('thematic_content', $content);
+		
+	} // end content_init
+
+
+function childtheme_override_content(){
+		global $thematic_content_length;
+	
+		if ( strtolower($thematic_content_length) == 'full' ) {
+			$post = get_the_content( thematic_more_text() );
+			$post = apply_filters('the_content', $post);
+			$post = str_replace(']]>', ']]&gt;', $post);
+		} elseif ( strtolower($thematic_content_length) == 'excerpt') {
+			$post = the_excerpt();
+			$post .= new_excerpt_more() ;//todo:read more after the excerpt
+			$post = apply_filters('the_excerpt',$post);
+			if ( apply_filters( 'thematic_post_thumbs', TRUE) ) {
+				$post_title = get_the_title();
+				$size = apply_filters( 'thematic_post_thumb_size' , array(100,100) );
+				$attr = apply_filters( 'thematic_post_thumb_attr', array('title'	=> sprintf( esc_attr__('Permalink to %s', 'thematic'), the_title_attribute( 'echo=0' ) ) ) );
+				if ( has_post_thumbnail() ) {
+					$post = sprintf('<a class="entry-thumb" href="%s" title="%s">%s</a>',
+									get_permalink() ,
+									sprintf( esc_attr__('Permalink to %s', 'thematic'), the_title_attribute( 'echo=0' ) ),
+									get_the_post_thumbnail(get_the_ID(), $size, $attr)) . $post;
+					}
+			}
+		} elseif ( strtolower($thematic_content_length) == 'none') {
+			$post= '';		
+		} else {
+			$post = get_the_content( thematic_more_text() );
+			$post = apply_filters('the_content', $post);
+			$post = str_replace(']]>', ']]&gt;', $post);
+		}
+		echo apply_filters('thematic_post', $post);
+	}  // end content
+
+
+
+//language//NOT WORKING FOR CHILDTHEME. Only parent theme lang files working//todo:fix
+function childtheme_add_language (){
+    	load_theme_textdomain( 'cp-dc', get_template_directory() . '/languages' );
+
+}
+add_action('after_setup_theme', 'childtheme_add_language', 10);
+///////
+
+
+
+
+/////////////////////////////////////
 
 /*
 // load google analytics, optimized version - mathiasbynens.be/notes/async-analytics-snippet

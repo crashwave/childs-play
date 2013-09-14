@@ -222,7 +222,10 @@ textarea {
 }
 
 body {
-  background: #f1f1f1;
+  /*DC edit bg add color
+  background: #f1f1f1;*/
+  color: #777777;
+  background: #FFF;
 }
 
 textarea {
@@ -239,7 +242,10 @@ h1, #blog-title {
 }
 
 h2, .entry-title {
-  margin: 0 0 0.7222em;
+  /* DC edit margin, padding
+  margin: 0 0 0.7222em;*/
+  margin: 0;
+  padding: .3em 0;/*DC add*/
   font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
   font-size: 2.25em;
   line-height: 1.4444em;
@@ -261,7 +267,9 @@ h4, .widgettitle {
   font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
   font-size: 1.5em;
   line-height: 1.0833em;
-  color: #3d3331;
+  /*DC Edit color
+  color: #3d3331;*/
+  color: #696969;
   text-shadow: -1px -1px 1px rgba(255, 255, 255, 0.5), 1px 1px 0 rgba(255, 255, 255, 0.5), 2px 2px 2px rgba(0, 0, 0, 0.2);
 }
 
@@ -392,8 +400,12 @@ hr {
 }
 
 ::selection {
+  /*DC edit bg, color
   background: #fe57a1;
-  color: #f1f1f1;
+  color: #f1f1f1;*/
+  background: yellow;
+  color: black;
+  
   text-shadow: none;
 }
 
@@ -413,7 +425,9 @@ blockquote span {
 }
 
 #wrapper {
-  background: url(images/bg-tiles.png);
+ /* DC edit
+   background: url(images/bg-tiles.png);
+   */
 }
 
 #header {
@@ -442,7 +456,9 @@ blockquote span {
 #blog-description {
   margin: 0;
   font: 1em/1.625 Georgia, Times, "Times New Roman", serif;
-  text-shadow: none;
+  /*DC Edit text-shadow, color
+  text-shadow: none;*/
+  color: #7f7f7f;
 }
 
 #header-widget {
@@ -461,7 +477,10 @@ blockquote span {
   *zoom: 1;
   width: 90%;
   margin: 0 auto 1.625em;
+  /*DC Edit background-color
   background-color: #211b1a;
+  */
+  background-color: #ddd;
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
 }
 #access:after {
@@ -531,7 +550,10 @@ blockquote span {
 }
 .sf-menu li a:hover {
   padding-left: 1.5em;
-  color: #da1113;
+  /* DC EDit
+  color: #da1113;*/
+  background: #111847;
+  color: #FFFFFF;
 }
 .sf-menu .has-flyout:after {
   border-color: #000 transparent transparent;
@@ -580,6 +602,9 @@ blockquote span {
   width: 90%;
   margin: 0 auto;
   clear: both;
+  /*DC edit*/
+  border: 1px solid #ececec;
+  background: white;
 }
 #main:after {
   content: "";
@@ -602,16 +627,27 @@ blockquote span {
   margin: 0 0 1.625em;
 }
 
+/*DC edit added*/
+article.post.hentry {
+  border-bottom: .1em dashed #CACACA;
+  margin: 0;
+  padding: 0 0 1em;
+}
+
 .sticky {
   padding: 1.625em;
   background: rgba(0, 0, 0, 0.1);
 }
 
 .entry-title a {
-  color: #3d3331;
+  /* DC edit 
+  color: #3d3331;*/
+  color: #696969;
 }
 .entry-title a:hover {
-  color: #da1113;
+  /*DC edit   
+  color: #da1113;*/
+  color: #111847;
 }
 
 .entry-meta {
@@ -638,7 +674,7 @@ blockquote span {
   color: #7f7f7f;
 }
 .entry-utility [class*="entypo-"]:before {
-  padding-right: 1em;
+  padding-right: 0.5em;/*DC edit*/
   font-family: 'entypo', sans-serif;
   font-size: 1.3em;
   text-shadow: -1px -1px 1px rgba(255, 255, 255, 0.5), 1px 1px 0 rgba(255, 255, 255, 0.5), 2px 2px 2px rgba(0, 0, 0, 0.2);
@@ -1207,7 +1243,9 @@ img#wpstats {
   .sf-menu li {
     position: relative;
     float: left;
+/* DC edit background
     background: #211b1a;
+    */
     border-bottom: none;
   }
   .sf-menu li:hover ul {
@@ -1222,11 +1260,15 @@ img#wpstats {
     display: block;
     position: relative;
     text-decoration: none;
+/* DC edit color
     color: #f1f1f1;
+    */
     padding: 0.5em 0.75em;
   }
   .sf-menu li a:focus, .sf-menu li a:hover, .sf-menu li a:active {
-    color: #da1113;
+    /* DC edit color
+    color: #da1113;*/
+    color: #FFF;
     padding: 0.5em 0.75em;
     outline: 0;
   }
@@ -1301,7 +1343,9 @@ img#wpstats {
   }
 
   .entry-utility {
-    padding: 1.625em 0;
+    /* DC edit
+    padding: 1.625em 0;*/
+    padding: 0.5em 0;
   }
   .entry-utility ul {
     float: left;
